@@ -25,7 +25,7 @@ export async function insertTask(task, Task) {
     return await newTask.save();
 }
 
-export async function updateBook(id, partialTask, Task) {
+export async function updateTask(id, partialTask, Task) {
     /* const dbId = ObjectId(id);
     const { booksCollection, mongoClient } = await booksConnect();
     const result = await booksCollection.findOneAndUpdate(
@@ -38,7 +38,7 @@ export async function updateBook(id, partialTask, Task) {
     return await Task.findByIdAndUpdate(id, partialTask, { new: true });
 }
 
-export async function deleteBook(id, Task) {
+export async function deleteTask(id, Task) {
     /* const dbId = ObjectId(id);
     const { booksCollection, mongoClient } = await booksConnect();
     const result = await booksCollection.findOneAndDelete({ _id: dbId });
