@@ -14,20 +14,20 @@ export async function mongoConnect() {
     return mongooseConnect;
 }
 
-/* export async function install(collection = 'books') {
-    const { mongoClient, dbCoders } = await mongoConnect();
-    await dbCoders.dropCollection(collection);
-    const booksCollection = dbCoders.collection(collection);
-    const result = await booksCollection.insertMany(dataJSON.books);
-    mongoClient.close();
-    return result;
-} */
+export async function installTasks(data, collection = 'tasks') {
+    const { Task, connection } = await tasksConnect(collection);
+    const deleted = await Task.deleteMany({});
+    // await dbCoders.dropCollection(collection);
+    const result = await Task.insertMany(data);
+    connection.disconnect();
+    return { result, deleted };
+}
 
 export async function tasksConnect(collection = 'tasks') {
     // const { mongoClient, dbCoders } = await mongoConnect();
     //const booksCollection = dbCoders.collection(collection);
     // return { mongoClient, booksCollection };
-    await mongoConnect();
+    const connection = await mongoConnect();
     const taskSchema = new mongoose.Schema({
         title: String,
         responsible: String,
@@ -35,6 +35,13 @@ export async function tasksConnect(collection = 'tasks') {
     });
     taskSchema.methods.algo = function () {};
 
-    const Task = mongoose.model(collection, taskSchema);
-    return Task;
+    let Task;
+    if (mongoose.default.models[collection]) {
+        Task = mongoose.model(collection);
+    } else {
+        Task = mongoose.model(collection, taskSchema);
+    }
+
+    // const Task = mongoose.model(collection, taskSchema);
+    return { Task, connection };
 }

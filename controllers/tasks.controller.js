@@ -1,8 +1,11 @@
 /* eslint-disable no-unused-vars */
-import * as crud from '../services/crud.js';
+import * as crud from '../services/tasks-crud.js';
 import { tasksConnect } from '../services/db.js';
 
-const Task = tasksConnect();
+/* export let Task;
+tasksConnect().then((resp) => (Task = resp.Task)); */
+
+export const { Task } = await tasksConnect();
 
 export const getAllTasks = (req, res) => {
     crud.getAllTasks(Task).then((resp) => {
